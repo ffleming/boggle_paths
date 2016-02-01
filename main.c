@@ -32,7 +32,6 @@ int main(int argc, char** argv) {
 void output_bignums(int sides) {
     mpz_t answer;
     mpz_init(answer);
-    mpz_set_ui(answer, 0);
     solve_bignum(sides, answer);
     printf("A board with %d sides has %s possible solutions\n", sides, mpz_get_str(NULL, 10, answer));
     mpz_clear(answer);
