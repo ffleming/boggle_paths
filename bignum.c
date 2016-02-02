@@ -7,14 +7,21 @@ void solve_bignum(int sides, mpz_t result) {
 
     mpz_t adder;
     mpz_init(adder);
-    for(int row = 0; row < sides; row++) {
-        for(int col = 0; col < sides; col++) {
+    int use_sides = sides;
+    if(sides % 2 == 0) {
+        use_sides = sides / 2;
+    }
+    for(int row = 0; row < use_sides; row++) {
+        for(int col = 0; col < use_sides; col++) {
             bool* visited = calloc(sides*sides, sizeof(bool));
             mpz_set_ui(adder, 1);
             solve_bignum_recursive(row, col, sides, visited, adder);
             mpz_add(result, result, adder);
             free(visited);
         }
+    }
+    if(sides % 2 == 0) {
+	mpz_mul_ui(result, result, 4);
     }
     mpz_clear(adder);
     return;
