@@ -4,7 +4,7 @@ LIBS=
 GMP=-lgmp
 BIN=boggle_paths
 all: clean bignum.o solver.o main.o
-	$(CC) $(GLFW_CFLAGS) $(CFLAGS) -o $(BIN) bignum.o solver.o main.o $(LIBS) $(GMP)
+	$(CC) $(CFLAGS) -o $(BIN) bignum.o solver.o main.o $(LIBS) $(GMP)
 
 main.o:
 	$(CC) $(CFLAGS) -c -o main.o main.c $(LIBS)
