@@ -2,25 +2,39 @@
 
 unsigned long long solve(int sides) {
     unsigned long long sum = 0;
-    int use_sides = sides;
-    bool sides_even = (sides % 2 == 0);
     unsigned long long adder = 0;
-    if(sides_even) {
-        use_sides = use_sides / 2;
+    int use_rows = sides / 2 > 1 ? sides / 2 : 1;
+    int use_cols = sides / 2 > 1 ? sides / 2 : 1;
+    bool sides_even = (sides % 2 == 0);
+    bool sides_large_odd = (!sides_even && sides > 1);
+    if(sides_large_odd){
+      use_rows += 1;
+      use_cols += 1;
     }
     printf("Solving for %dx%d grid...\n", sides, sides);
-    for(int row = 0; row < use_sides; row++) {
-        for(int col = 0; col < use_sides; col++) {
+
+    for(int row = 0; row < use_rows; row++) {
+        for(int col = 0; col < use_cols; col++) {
+            if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
+                continue;
+            }
             bool* visited = calloc(sides*sides, sizeof(bool));
             adder = solve_recursive(row, col, sides, visited, 1);
-	    sum += adder;
             free(visited);
             printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
+            if(sides_even) {
+                printf("\t\tEven sides; square will be used four times\n");
+                adder *= 4;
+            } else if(sides_large_odd) {
+                if(row != use_rows-1 || col != use_cols-1) {
+                    printf("\t\tOdd sides; square will be used four times\n");
+                    adder *= 4;
+                } else {
+                    printf("\t\tCenter square is only used once\n");
+                }
+            }
+            sum += adder;
         }
-    }
-    if(sides_even) {
-        sum *= 4;
-	printf("\tEven sides detected: multiplying by four\n");
     }
     return(sum);
 }
