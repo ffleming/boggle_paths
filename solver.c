@@ -3,19 +3,24 @@
 unsigned long long solve(int sides) {
     unsigned long long sum = 0;
     int use_sides = sides;
-    if(sides % 2 == 0) {
-        use_sides = sides / 2;
+    bool sides_even = (sides % 2 == 0);
+    unsigned long long adder = 0;
+    if(sides_even) {
+        use_sides = use_sides / 2;
     }
     printf("Solving for %dx%d grid...\n", sides, sides);
     for(int row = 0; row < use_sides; row++) {
         for(int col = 0; col < use_sides; col++) {
             bool* visited = calloc(sides*sides, sizeof(bool));
-            sum += solve_recursive(row, col, sides, visited, 1);
+            adder = solve_recursive(row, col, sides, visited, 1);
+	    sum += adder;
             free(visited);
+            printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
         }
     }
-    if(sides % 2 == 0) {
+    if(sides_even) {
         sum *= 4;
+	printf("\tEven sides detected: multiplying by four\n");
     }
     return(sum);
 }

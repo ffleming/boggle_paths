@@ -3,12 +3,14 @@
 
 void solve_bignum(int sides, mpz_t result) {
     mpz_set_ui(result, 0);
-    printf("Solving with bignums for %dx%d grid...\n", sides, sides);
-
     mpz_t adder;
     mpz_init(adder);
+    bool sides_even = (sides % 2 == 0);
     int use_sides = sides;
-    if(sides % 2 == 0) {
+
+    printf("Solving with bignums for %dx%d grid...\n", sides, sides);
+
+    if(sides_even) {
         use_sides = sides / 2;
     }
     for(int row = 0; row < use_sides; row++) {
@@ -18,9 +20,11 @@ void solve_bignum(int sides, mpz_t result) {
             solve_bignum_recursive(row, col, sides, visited, adder);
             mpz_add(result, result, adder);
             free(visited);
+            printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, mpz_get_str(NULL, 10, adder));
         }
     }
-    if(sides % 2 == 0) {
+    if(sides_even) {
+	printf("\tEven sides detected: multiplying by four\n");
 	mpz_mul_ui(result, result, 4);
     }
     mpz_clear(adder);
