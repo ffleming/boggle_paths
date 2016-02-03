@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
         default:
             help(argv[0], 1);
     }
-    if(sides >= 6) {
+    if(sides >= 7) {
       output_bignums(sides);
     } else {
         printf("A board with %d sides has %llu possible solutions\n", sides, solve(sides));
