@@ -1,7 +1,7 @@
 #include "bignum.h"
 #include "solver.h"
 
-void solve_bignum(int sides, mpz_t result) {
+void solve_bignum(int sides, bool quiet, mpz_t result) {
     mpz_set_ui(result, 0);
     mpz_t adder;
     mpz_init(adder);
@@ -14,8 +14,9 @@ void solve_bignum(int sides, mpz_t result) {
       use_cols += 1;
     }
 
-    printf("Solving with bignums for %dx%d grid...\n", sides, sides);
-
+    if(!quiet) {
+        printf("Solving with bignums for %dx%d grid...\n", sides, sides);
+    }
     for(int row = 0; row < use_rows; row++) {
         for(int col = 0; col < use_cols; col++) {
             if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
@@ -25,16 +26,24 @@ void solve_bignum(int sides, mpz_t result) {
             mpz_set_ui(adder, 1);
             solve_bignum_recursive(row, col, sides, visited, adder);
             free(visited);
-            printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, mpz_get_str(NULL, 10, adder));
+            if(!quiet) {
+                printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, mpz_get_str(NULL, 10, adder));
+            }
             if(sides_even) {
-                printf("\t\tEven sides; square will be used four times\n");
+                if(!quiet) {
+                    printf("\t\tEven sides; square will be used four times\n");
+                }
                 mpz_mul_ui(adder, adder, 4);
             } else if(sides_large_odd) {
                 if(row != use_rows-1 || col != use_cols-1) {
-                    printf("\t\tOdd sides; square will be used four times\n");
+                    if(!quiet) {
+                        printf("\t\tOdd sides; square will be used four times\n");
+                    }
                     mpz_mul_ui(adder, adder, 4);
                 } else {
-                    printf("\t\tCenter square is only used once\n");
+                    if(!quiet){
+                        printf("\t\tCenter square is only used once\n");
+                    }
                 }
             }
             mpz_add(result, result, adder);
