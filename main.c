@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     } else if(optind + 1 == argc) {
         sides = atoi(argv[optind]);
     }
-    if(sides == 0) {
+    if(sides <= 0) {
         help(argv[0], 1);
     }
     if(sides >= 7) {
