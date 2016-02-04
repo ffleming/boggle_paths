@@ -6,12 +6,25 @@
 int main(int argc, char** argv) {
     int sides = 0;
     bool quiet_flag = false;
-    bool help_flag = false;
+
+    parse_opts(argc, argv, &quiet_flag, &sides);
+    if(sides <= 0) {
+        help(argv[0], 1);
+    }
+    if(sides >= 7) {
+        output_bignums(sides, quiet_flag);
+    } else {
+        printf("A board with %d sides has %llu possible solutions\n", sides, solve(sides, quiet_flag));
+    }
+    exit(0);
+}
+
+void parse_opts(int argc, char** argv, bool* quiet_flag, int* sides) {
     int c;
     while((c = getopt(argc, argv, "qh")) != -1) {
         switch(c) {
             case 'q':
-                quiet_flag = true;
+                *quiet_flag = true;
                 break;
             case 'h':
                 help(argv[0], 0);
@@ -22,19 +35,10 @@ int main(int argc, char** argv) {
     }
 
     if(argc == optind) {
-        sides = 4;
+        *sides = 4;
     } else if(optind + 1 == argc) {
-        sides = atoi(argv[optind]);
+        *sides = atoi(argv[optind]);
     }
-    if(sides <= 0) {
-        help(argv[0], 1);
-    }
-    if(sides >= 7) {
-        output_bignums(sides, quiet_flag);
-    } else {
-        printf("A board with %d sides has %llu possible solutions\n", sides, solve(sides, quiet_flag));
-    }
-    exit(0);
 }
 
 void output_bignums(int sides, bool quiet) {
