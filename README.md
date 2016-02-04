@@ -49,3 +49,10 @@ A board with 4 sides has 12029640 possible solutions
 2.54user 0.00system 0:02.54elapsed 99%CPU (0avgtext+0avgdata 1408maxresident)k
 0inputs+0outputs (0major+82minor)pagefaults 0swaps
 ```
+```
+A board with 5 sides has 115066382913 possible solutions
+
+real    481m49.871s
+user    481m48.530s
+sys     0m0.750s
+```
