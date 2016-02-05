@@ -56,3 +56,41 @@ real    481m49.871s
 user    481m48.530s
 sys     0m0.750s
 ```
+
+###To Do
+
+There's still some duplication of work:
+(1, 2) and (2, 1) are duplicates for boards of both 4 and 5 side length
+
+```
+Solving for 4x4 grid...
+	Solved square at row 1, column 1: 1012520
+		Even sides; square will be used four times
+	Solved square at row 1, column 2: 740111
+		Even sides; square will be used four times
+	Solved square at row 2, column 1: 740111
+		Even sides; square will be used four times
+	Solved square at row 2, column 2: 514668
+		Even sides; square will be used four times
+A board with 4 sides has 12029640 possible solutions
+```
+
+```
+Solving for 5x5 grid...
+        Solved square at row 1, column 1: 6771537049
+                Odd sides; square will be used four times
+        Solved square at row 1, column 2: 4862635371
+                Odd sides; square will be used four times
+        Solved square at row 1, column 3: 4622951793
+                Odd sides; square will be used four times
+        Solved square at row 2, column 1: 4862635371
+                Odd sides; square will be used four times
+        Solved square at row 2, column 2: 3211115249
+                Odd sides; square will be used four times
+        Solved square at row 2, column 3: 3410890339
+                Odd sides; square will be used four times
+        Solved square at row 3, column 3: 4099322225
+                Center square is only used once
+```
+
+
