@@ -15,14 +15,14 @@ unsigned long long solve(int sides, bool quiet) {
         printf("Solving for %dx%d grid...\n", sides, sides);
     }
 
+    bool* visited = calloc(sides*sides, sizeof(bool));
     for(int row = 0; row < use_rows; row++) {
         for(int col = 0; col < use_cols; col++) {
             if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
                 continue;
             }
-            bool* visited = calloc(sides*sides, sizeof(bool));
+            memset(visited, 0, sizeof(bool) * sides * sides);
             adder = solve_recursive(row, col, sides, visited, 1);
-            free(visited);
             if(!quiet) {
                 printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
             }
@@ -46,6 +46,7 @@ unsigned long long solve(int sides, bool quiet) {
             sum += adder;
         }
     }
+    free(visited);
     return(sum);
 }
 
