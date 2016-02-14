@@ -44,22 +44,6 @@ int multiplier_for(int row, int col, int sides, bool quiet) {
     return 1;
 }
 
-void print_board(bool* board, int sides) {
-    for(int row=0; row < sides; row++) {
-        printf("|");
-        for(int col=0; col < sides; col++) {
-            if(get_visited(board, sides, row, col)) {
-                printf("X");
-            } else {
-                printf(" ");
-            }
-            printf("|");
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
 void set_true(bool* board, int sides, int row, int col) {
     set_val(board, sides, row, col, true);
 }
