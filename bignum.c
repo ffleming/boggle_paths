@@ -17,15 +17,15 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
     if(!quiet) {
         printf("Solving with bignums for %dx%d grid...\n", sides, sides);
     }
+    bool* visited = calloc(sides*sides, sizeof(bool));
     for(int row = 0; row < use_rows; row++) {
         for(int col = 0; col < use_cols; col++) {
             if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
                 continue;
             }
-            bool* visited = calloc(sides*sides, sizeof(bool));
             mpz_set_ui(adder, 1);
+            memset(visited, 0, sizeof(bool) * sides * sides);
             solve_bignum_recursive(row, col, sides, visited, adder);
-            free(visited);
             if(!quiet) {
                 printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, mpz_get_str(NULL, 10, adder));
             }
@@ -50,18 +50,15 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
         }
     }
     mpz_clear(adder);
+    free(visited);
     return;
 }
 
 void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum) {
-    bool* new_visited = malloc(sides * sides * sizeof(bool));
     mpz_t old_sum;
     mpz_init_set(old_sum, sum);
     mpz_t adder;
     mpz_init(adder);
-
-    memcpy(new_visited, visited, sizeof(bool) * sides * sides);
-    set_true(new_visited, sides, cur_row, cur_col);
 
     for(int row=0; row < sides; row++) {
         for(int col=0; col < sides; col++) {
@@ -82,12 +79,13 @@ void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, 
 
             // Code below this is only called for unvisited neighbors
             mpz_set(adder, old_sum);
-            solve_bignum_recursive(row, col, sides, new_visited, adder);
+            set_true(visited, sides, cur_row, cur_col);
+            solve_bignum_recursive(row, col, sides, visited, adder);
+            set_false(visited, sides, cur_row, cur_col);
             mpz_add(sum, sum, adder);
         }
     }
     mpz_clear(adder);
-    free(new_visited);
     mpz_clear(old_sum);
     return;
 }

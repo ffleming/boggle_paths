@@ -15,14 +15,14 @@ unsigned long long solve(int sides, bool quiet) {
         printf("Solving for %dx%d grid...\n", sides, sides);
     }
 
+    bool* visited = calloc(sides*sides, sizeof(bool));
     for(int row = 0; row < use_rows; row++) {
         for(int col = 0; col < use_cols; col++) {
             if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
                 continue;
             }
-            bool* visited = calloc(sides*sides, sizeof(bool));
+            memset(visited, 0, sizeof(bool) * sides * sides);
             adder = solve_recursive(row, col, sides, visited, 1);
-            free(visited);
             if(!quiet) {
                 printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
             }
@@ -46,6 +46,7 @@ unsigned long long solve(int sides, bool quiet) {
             sum += adder;
         }
     }
+    free(visited);
     return(sum);
 }
 
@@ -66,11 +67,9 @@ void print_board(bool* board, int sides) {
 }
 
 unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* visited, unsigned long long sum) {
-    bool* new_visited = malloc(sides * sides * sizeof(bool));
     unsigned long long old_sum = sum;
-    memcpy(new_visited, visited, sizeof(bool) * sides * sides);
-    set_true(new_visited, sides, cur_row, cur_col);
 
+    set_true(visited, sides, cur_row, cur_col);
     bool early_return = true;
     for(int row=0; row < sides; row++) {
         for(int col=0; col < sides; col++) {
@@ -91,10 +90,11 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
 
             // Code below this is only called for unvisited neighbors
             early_return = false;
-            sum += (solve_recursive(row, col, sides, new_visited, old_sum));
+            sum += (solve_recursive(row, col, sides, visited, old_sum));
         }
     }
-    free(new_visited);
+
+    set_false(visited, sides, cur_row, cur_col);
     if(early_return) {
         return(1);
     }
@@ -102,7 +102,15 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
 }
 
 void set_true(bool* board, int sides, int row, int col) {
-    board[(sides * row) + col] = true;
+    set_val(board, sides, row, col, true);
+}
+
+void set_false(bool* board, int sides, int row, int col) {
+    set_val(board, sides, row, col, false);
+}
+
+void set_val(bool* board, int sides, int row, int col, bool val) {
+    board[(sides * row) + col] = val;
 }
 
 bool get_visited(bool* board, int sides, int row, int col) {
