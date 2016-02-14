@@ -1,4 +1,5 @@
 #include "solver.h"
+#include "helper.h"
 
 unsigned long long solve(int sides, bool quiet) {
     unsigned long long sum = 0;
@@ -16,9 +17,9 @@ unsigned long long solve(int sides, bool quiet) {
     }
 
     bool* visited = calloc(sides*sides, sizeof(bool));
-    for(int row = 0; row < use_rows; row++) {
-        for(int col = 0; col < use_cols; col++) {
-            if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
+    for(int row = 0; row < sides; row++) {
+        for(int col = 0; col < sides; col++) {
+            if(is_duplicate(row, col, sides)) {
                 continue;
             }
             memset(visited, 0, sizeof(bool) * sides * sides);
@@ -26,44 +27,12 @@ unsigned long long solve(int sides, bool quiet) {
             if(!quiet) {
                 printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
             }
-            if(sides_even) {
-                if(!quiet) {
-                    printf("\t\tEven sides; square will be used four times\n");
-                }
-                adder *= 4;
-            } else if(sides_large_odd) {
-                if(row != use_rows-1 || col != use_cols-1) {
-                    if(!quiet) {
-                        printf("\t\tOdd sides; square will be used four times\n");
-                    }
-                    adder *= 4;
-                } else {
-                    if(!quiet) {
-                        printf("\t\tCenter square is only used once\n");
-                    }
-                }
-            }
+            adder *= multiplier_for(row, col, sides, quiet);
             sum += adder;
         }
     }
     free(visited);
     return(sum);
-}
-
-void print_board(bool* board, int sides) {
-    for(int row=0; row < sides; row++) {
-        printf("|");
-        for(int col=0; col < sides; col++) {
-            if(get_visited(board, sides, row, col)) {
-                printf("X");
-            } else {
-                printf(" ");
-            }
-            printf("|");
-        }
-        printf("\n");
-    }
-    printf("\n");
 }
 
 unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* visited, unsigned long long sum) {
@@ -93,18 +62,3 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
     return(sum);
 }
 
-void set_true(bool* board, int sides, int row, int col) {
-    set_val(board, sides, row, col, true);
-}
-
-void set_false(bool* board, int sides, int row, int col) {
-    set_val(board, sides, row, col, false);
-}
-
-void set_val(bool* board, int sides, int row, int col, bool val) {
-    board[(sides * row) + col] = val;
-}
-
-bool get_visited(bool* board, int sides, int row, int col) {
-    return( board[(sides * row) + col] );
-}

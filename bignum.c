@@ -1,5 +1,5 @@
 #include "bignum.h"
-#include "solver.h"
+#include "helper.h"
 
 void solve_bignum(int sides, bool quiet, mpz_t result) {
     mpz_set_ui(result, 0);
