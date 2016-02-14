@@ -8,10 +8,11 @@ particular number of sides.  Compile with
 ```
 and run with
 ```
-% ./boggle_paths [-h] <SIDES>
+./boggle_paths [-h] [-q] <SIDES>
    SIDES defaults to 4 if not specified
 
-   -h, --help		This help
+   -q		Suppress status output
+   -h		This help
 ```
 
 ###Calculated results
