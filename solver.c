@@ -2,7 +2,7 @@
 
 unsigned long long solve(int sides, bool quiet) {
     unsigned long long sum = 0;
-    unsigned long long adder = 0;
+    unsigned long long adder = 1;
     int use_rows = sides / 2 > 1 ? sides / 2 : 1;
     int use_cols = sides / 2 > 1 ? sides / 2 : 1;
     bool sides_even = (sides % 2 == 0);
@@ -69,9 +69,8 @@ void print_board(bool* board, int sides) {
 unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* visited, unsigned long long sum) {
     unsigned long long old_sum = sum;
 
-    set_true(visited, sides, cur_row, cur_col);
-    bool early_return = true;
     int row, col;
+    set_true(visited, sides, cur_row, cur_col);
     for(int row_offset=-1; row_offset <= 1; row_offset++) {
         row = cur_row + row_offset;
         for(int col_offset=-1; col_offset <= 1; col_offset++) {
@@ -86,15 +85,11 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
                 continue;
             }
             // Code below this is only called for unvisited neighbors
-            early_return = false;
             sum += (solve_recursive(row, col, sides, visited, old_sum));
         }
     }
 
     set_false(visited, sides, cur_row, cur_col);
-    if(early_return) {
-        return(1);
-    }
     return(sum);
 }
 
