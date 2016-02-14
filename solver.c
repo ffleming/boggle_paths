@@ -71,23 +71,20 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
 
     set_true(visited, sides, cur_row, cur_col);
     bool early_return = true;
-    for(int row=0; row < sides; row++) {
-        for(int col=0; col < sides; col++) {
-            // Make sure cell at row&col is unvisited
+    int row, col;
+    for(int row_offset=-1; row_offset <= 1; row_offset++) {
+        row = cur_row + row_offset;
+        for(int col_offset=-1; col_offset <= 1; col_offset++) {
+            col = cur_col + col_offset;
+            if(col < 0 || row < 0 || col >= sides || row >= sides) {
+                continue;
+            }
+            if(row_offset == 0 && col_offset == 0) {
+                continue;
+            }
             if(get_visited(visited, sides, row, col) == true) {
                 continue;
             }
-            // Make sure cell at row&col is a neighbor
-            if(abs(cur_row - row) > 1) {
-                continue;
-            }
-            if(abs(cur_col - col) > 1) {
-                continue;
-            }
-            if(row == cur_row && col == cur_col) {
-                continue;
-            }
-
             // Code below this is only called for unvisited neighbors
             early_return = false;
             sum += (solve_recursive(row, col, sides, visited, old_sum));
