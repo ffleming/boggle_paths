@@ -26,4 +26,6 @@ profile: clean all
 	for arg in 1 2 3 4 ; do \
 		echo "\n$$arg sides:"; \
 		time ./$(BIN) $(PROFILE_FLAGS) $$arg; \
+		echo "\n$$arg sides with bignums:"; \
+		time ./$(BIN) $(PROFILE_FLAGS) -b $$arg; \
 	done
