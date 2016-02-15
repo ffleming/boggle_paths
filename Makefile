@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-std=c99 -Ofast
+CFLAGS=-std=c99 -Ofast -Wall
 LIBS=
 GMP=-lgmp
 BIN=boggle_paths
