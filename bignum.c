@@ -16,45 +16,21 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
     mpz_set_ui(result, 0);
     mpz_t adder;
     mpz_init(adder);
-    int use_rows = sides / 2 > 1 ? sides / 2 : 1;
-    int use_cols = sides / 2 > 1 ? sides / 2 : 1;
-    bool sides_even = (sides % 2 == 0);
-    bool sides_large_odd = (!sides_even && sides > 1);
-    if(sides_large_odd){
-      use_rows += 1;
-      use_cols += 1;
-    }
 
     if(!quiet) {
         printf("Solving with bignums for %dx%d grid...\n", sides, sides);
     }
-    for(int row = 0; row < use_rows; row++) {
-        for(int col = 0; col < use_cols; col++) {
-            if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
+    for(int row = 0; row < sides; row++) {
+        for(int col = 0; col < sides; col++) {
+            if(is_duplicate(row, col, sides)) {
                 continue;
             }
             solve_bignum_single(row, col, sides, quiet, adder);
+            mpz_mul_si(adder, adder, multiplier_for(row, col, sides, quiet));
             if(!quiet) {
                 char* out_string = mpz_get_str(NULL, 10, adder);
                 printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, out_string);
                 free(out_string);
-            }
-            if(sides_even) {
-                if(!quiet) {
-                    printf("\t\tEven sides; square will be used four times\n");
-                }
-                mpz_mul_ui(adder, adder, 4);
-            } else if(sides_large_odd) {
-                if(row != use_rows-1 || col != use_cols-1) {
-                    if(!quiet) {
-                        printf("\t\tOdd sides; square will be used four times\n");
-                    }
-                    mpz_mul_ui(adder, adder, 4);
-                } else {
-                    if(!quiet){
-                        printf("\t\tCenter square is only used once\n");
-                    }
-                }
             }
             mpz_add(result, result, adder);
         }
