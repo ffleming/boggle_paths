@@ -4,8 +4,8 @@ LIBS=
 GMP=-lgmp
 BIN=boggle_paths
 PROFILE_FLAGS=-q
-all: clean bignum.o solver.o main.o
-	$(CC) $(CFLAGS) -o $(BIN) bignum.o solver.o main.o $(LIBS) $(GMP)
+all: clean bignum.o solver.o main.o helper.o
+	$(CC) $(CFLAGS) -o $(BIN) bignum.o solver.o main.o helper.o $(LIBS) $(GMP)
 
 main.o:
 	$(CC) $(CFLAGS) -c -o main.o main.c $(LIBS)
@@ -15,6 +15,9 @@ solver.o:
 
 bignum.o:
 	$(CC) $(CFLAGS) -c -o bignum.o bignum.c $(LIBS)
+
+helper.o:
+	$(CC) $(CFLAGS) -c -o helper.o helper.c $(LIBS)
 
 clean:
 	-rm *.o $(BIN)

@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gmp.h>
-void help(char*, int);
-void output_bignums(int, bool);
-void parse_opts(int argc, char** argv, bool*, int*);
+void help(char* program_name, int code);
+void output_bignums(int sides, bool quiet, int only_row, int only_col);
+void parse_opts(int argc, char** argv, bool*, int*, int*, int*);
+void print_board(int sides);
 #endif
