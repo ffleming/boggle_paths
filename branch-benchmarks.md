@@ -100,6 +100,12 @@ A board with 3 sides has 10305 possible solutions
 A board with 4 sides has 12029640 possible solutions
 0.60user 0.00system 0:00.60elapsed 98%CPU (0avgtext+0avgdata 1244maxresident)k
 0inputs+0outputs (0major+79minor)pagefaults 0swaps
+
+5 sides:
+A board with 5 sides has 115066382913 possible solutions
+real    107m13.270s
+user    107m13.190s
+sys     0m0.000s
 ```
 
 f009981 (Add single cell)
@@ -124,4 +130,10 @@ A board with 3 sides has 10305 possible solutions
 A board with 4 sides has 12029640 possible solutions
 0.73user 0.00system 0:00.73elapsed 98%CPU (0avgtext+0avgdata 1288maxresident)k
 0inputs+0outputs (0major+80minor)pagefaults 0swaps
+
+5 sides:
+A board with 5 sides has 115066382913 possible solutions
+real    133m7.461s
+user    133m7.370s
+sys     0m0.010s
 ```
