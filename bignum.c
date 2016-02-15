@@ -1,6 +1,17 @@
 #include "bignum.h"
 #include "helper.h"
 
+void solve_bignum_single(int row, int col, int sides, bool quiet, mpz_t result) {
+    mpz_set_ui(result, 1);
+    bool* visited = calloc(sides*sides, sizeof(bool));
+    if(!quiet) {
+        printf("Solving with bignums for (%d, %d) on a %dx%d grid...\n",col+1, row+1, sides, sides);
+    }
+    solve_bignum_recursive(row, col, sides, visited, result);
+    free(visited);
+    return;
+}
+
 void solve_bignum(int sides, bool quiet, mpz_t result) {
     mpz_set_ui(result, 0);
     mpz_t adder;
@@ -17,17 +28,16 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
     if(!quiet) {
         printf("Solving with bignums for %dx%d grid...\n", sides, sides);
     }
-    bool* visited = calloc(sides*sides, sizeof(bool));
     for(int row = 0; row < use_rows; row++) {
         for(int col = 0; col < use_cols; col++) {
             if(sides_large_odd && (row == (use_rows-1) && col != (use_cols-1))) {
                 continue;
             }
-            mpz_set_ui(adder, 1);
-            memset(visited, 0, sizeof(bool) * sides * sides);
-            solve_bignum_recursive(row, col, sides, visited, adder);
+            solve_bignum_single(row, col, sides, quiet, adder);
             if(!quiet) {
-                printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, mpz_get_str(NULL, 10, adder));
+                char* out_string = mpz_get_str(NULL, 10, adder);
+                printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, out_string);
+                free(out_string);
             }
             if(sides_even) {
                 if(!quiet) {
@@ -50,7 +60,6 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
         }
     }
     mpz_clear(adder);
-    free(visited);
     return;
 }
 

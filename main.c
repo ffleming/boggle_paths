@@ -13,10 +13,11 @@ int main(int argc, char** argv) {
     if(sides <= 0) {
         help(argv[0], 1);
     }
-    if(sides >= 7) {
-        output_bignums(sides, quiet_flag);
+    if(sides >= 1) {
+        output_bignums(sides, quiet_flag, only_row, only_col);
     } else {
-        printf("A board with %d sides has %llu possible solutions\n", sides, solve(sides, quiet_flag));
+        unsigned long long result = solve(sides, quiet_flag);
+        printf("A board with %d sides has %llu possible solutions\n", sides, result);
     }
     exit(0);
 }
@@ -51,11 +52,20 @@ void parse_opts(int argc, char** argv, bool* quiet_flag, int* sides, int* only_r
     }
 }
 
-void output_bignums(int sides, bool quiet) {
+void output_bignums(int sides, bool quiet, int only_row, int only_col) {
     mpz_t answer;
     mpz_init(answer);
-    solve_bignum(sides, quiet, answer);
-    printf("A board with %d sides has %s possible solutions\n", sides, mpz_get_str(NULL, 10, answer));
+    if (only_row != 0 && only_col != 0) {
+        solve_bignum_single(only_row - 1, only_col - 1, sides, quiet, answer);
+        printf("Cell (%d, %d) on a board with %d sides is the starting point of %s paths\n",
+                only_col, only_row, sides, mpz_get_str(NULL, 10, answer));
+    } else {
+        char* out_string;
+        solve_bignum(sides, quiet, answer);
+        out_string = mpz_get_str(NULL, 10, answer);
+        printf("A board with %d sides has %s possible solutions\n", sides, out_string);
+        free(out_string);
+    }
     mpz_clear(answer);
     return;
 }
