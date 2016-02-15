@@ -42,7 +42,8 @@ unsigned long long solve(int sides, bool quiet) {
     return(sum);
 }
 
-unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* visited, unsigned long long sum) {
+unsigned long long solve_recursive(int cur_row, int cur_col, int sides,
+        bool* visited, unsigned long long sum) {
     unsigned long long old_sum = sum;
 
     int row, col;

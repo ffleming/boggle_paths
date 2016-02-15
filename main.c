@@ -30,7 +30,8 @@ int main(int argc, char** argv) {
     exit(0);
 }
 
-void parse_opts(int argc, char** argv, bool* quiet_flag, bool* bignum_flag, int* sides, int* only_row, int* only_col) {
+void parse_opts(int argc, char** argv, bool* quiet_flag, bool* bignum_flag, int* sides,
+        int* only_row, int* only_col) {
     int c;
     int ret;
     while((c = getopt(argc, argv, "qhbo:")) != -1) {

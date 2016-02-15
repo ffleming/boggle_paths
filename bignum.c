@@ -50,7 +50,8 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
     return;
 }
 
-void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum, mpz_t old_sum, int depth, mpz_t* adders) {
+void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum,
+        mpz_t old_sum, int depth, mpz_t* adders) {
     mpz_set(old_sum, sum);
     mpz_ptr adder = adders[depth];
 
