@@ -3,15 +3,23 @@
 
 void solve_bignum_single(int row, int col, int sides, bool quiet, mpz_t result) {
     mpz_t placeholder;
+    mpz_t* adders = malloc(sides * sides * sizeof(mpz_t));
+    for(int i = 0; i < sides * sides; i++) {
+        mpz_init(adders[i]);
+    }
     mpz_init(placeholder);
     mpz_set_ui(result, 1);
     bool* visited = calloc(sides*sides, sizeof(bool));
     if(!quiet) {
         printf("Solving with bignums for (%d, %d) on a %dx%d grid...\n",col+1, row+1, sides, sides);
     }
-    solve_bignum_recursive(row, col, sides, visited, result, placeholder);
+    solve_bignum_recursive(row, col, sides, visited, result, placeholder, 0, adders);
     free(visited);
+    for(int i = 0; i < sides * sides; i++) {
+        mpz_clear(adders[i]);
+    }
     mpz_clear(placeholder);
+    free(adders);
     return;
 }
 
@@ -29,12 +37,12 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
                 continue;
             }
             solve_bignum_single(row, col, sides, quiet, adder);
-            mpz_mul_si(adder, adder, multiplier_for(row, col, sides, quiet));
             if(!quiet) {
                 char* out_string = mpz_get_str(NULL, 10, adder);
                 printf("\tSolved square at row %d, column %d: %s\n", row+1, col+1, out_string);
                 free(out_string);
             }
+            mpz_mul_si(adder, adder, multiplier_for(row, col, sides, quiet));
             mpz_add(result, result, adder);
         }
     }
@@ -42,10 +50,9 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
     return;
 }
 
-void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum, mpz_t old_sum) {
+void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum, mpz_t old_sum, int depth, mpz_t* adders) {
     mpz_set(old_sum, sum);
-    mpz_t adder;
-    mpz_init(adder);
+    mpz_ptr adder = adders[depth];
 
     int row, col;
     //set current cell to visited
@@ -69,11 +76,10 @@ void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, 
             }
             // Code below this is only called for unvisited neighbors
             mpz_set(adder, old_sum);
-            solve_bignum_recursive(row, col, sides, visited, adder, old_sum);
+            solve_bignum_recursive(row, col, sides, visited, adder, old_sum, depth + 1, adders);
             mpz_add(sum, sum, adder);
         }
     }
-    mpz_clear(adder);
     //Unvisit current cell
     visited[(sides * cur_row) + cur_col] = false;
     return;
