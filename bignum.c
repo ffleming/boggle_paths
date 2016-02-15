@@ -2,13 +2,16 @@
 #include "helper.h"
 
 void solve_bignum_single(int row, int col, int sides, bool quiet, mpz_t result) {
+    mpz_t placeholder;
+    mpz_init(placeholder);
     mpz_set_ui(result, 1);
     bool* visited = calloc(sides*sides, sizeof(bool));
     if(!quiet) {
         printf("Solving with bignums for (%d, %d) on a %dx%d grid...\n",col+1, row+1, sides, sides);
     }
-    solve_bignum_recursive(row, col, sides, visited, result);
+    solve_bignum_recursive(row, col, sides, visited, result, placeholder);
     free(visited);
+    mpz_clear(placeholder);
     return;
 }
 
@@ -39,9 +42,8 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
     return;
 }
 
-void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum) {
-    mpz_t old_sum;
-    mpz_init_set(old_sum, sum);
+void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum, mpz_t old_sum) {
+    mpz_set(old_sum, sum);
     mpz_t adder;
     mpz_init(adder);
 
@@ -62,12 +64,11 @@ void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, 
             }
             // Code below this is only called for unvisited neighbors
             mpz_set(adder, old_sum);
-            solve_bignum_recursive(row, col, sides, visited, adder);
+            solve_bignum_recursive(row, col, sides, visited, adder, old_sum);
             mpz_add(sum, sum, adder);
         }
     }
     mpz_clear(adder);
-    mpz_clear(old_sum);
     set_false(visited, sides, cur_row, cur_col);
     return;
 }
