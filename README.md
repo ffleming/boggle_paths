@@ -8,11 +8,20 @@ particular number of sides.  Compile with
 ```
 and run with
 ```
-./boggle_paths [-h] [-q] <SIDES>
+./boggle_paths [-h] [-q] [-o COL,ROW] <SIDES>
    SIDES defaults to 4 if not specified
 
    -q		Suppress status output
    -h		This help
+   -o		Only solve for cell specified by COL and ROW
+   		Board is indexed as follows:
+		   1 2 3 4 5 6
+		1 | | | | | | |
+		2 | | | | | | |
+		3 | | | | | | |
+		4 | | | | | | |
+		5 | | | | | | |
+		6 | | | | | | |
 ```
 
 ###Calculated results
