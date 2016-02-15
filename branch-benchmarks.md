@@ -137,3 +137,35 @@ real    133m7.461s
 user    133m7.370s
 sys     0m0.010s
 ```
+
+ca5ff4bb2 (Inline visitation functions
+--
+
+```
+1 sides:
+A board with 1 sides has 1 possible solutions
+0.00user 0.00system 0:00.00elapsed 0%CPU (0avgtext+0avgdata 1412maxresident)k
+0inputs+0outputs (0major+81minor)pagefaults 0swaps
+
+2 sides:
+A board with 2 sides has 64 possible solutions
+0.00user 0.00system 0:00.00elapsed 0%CPU (0avgtext+0avgdata 1248maxresident)k
+0inputs+0outputs (0major+79minor)pagefaults 0swaps
+
+3 sides:
+A board with 3 sides has 10305 possible solutions
+0.00user 0.00system 0:00.00elapsed 0%CPU (0avgtext+0avgdata 1248maxresident)k
+0inputs+0outputs (0major+77minor)pagefaults 0swaps
+
+4 sides:
+A board with 4 sides has 12029640 possible solutions
+0.61user 0.00system 0:00.61elapsed 98%CPU (0avgtext+0avgdata 1224maxresident)k
+0inputs+0outputs (0major+78minor)pagefaults 0swaps
+
+5 sides:
+A board with 5 sides has 115066382913 possible solutions
+
+real    110m23.925s
+user    110m23.840s
+sys     0m0.000s
+```
