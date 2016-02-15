@@ -1,6 +1,16 @@
 #include "solver.h"
 #include "helper.h"
 
+unsigned long long solve_single(int row, int col, int sides, bool quiet) {
+    bool* visited = calloc(sides*sides, sizeof(bool));
+    if(!quiet) {
+        printf("Solving with bignums for (%d, %d) on a %dx%d grid...\n",col+1, row+1, sides, sides);
+    }
+    unsigned long long ret = solve_recursive(row, col, sides, visited, 1);
+    free(visited);
+    return ret;
+}
+
 unsigned long long solve(int sides, bool quiet) {
     unsigned long long sum = 0;
     unsigned long long adder = 1;
@@ -16,14 +26,12 @@ unsigned long long solve(int sides, bool quiet) {
         printf("Solving for %dx%d grid...\n", sides, sides);
     }
 
-    bool* visited = calloc(sides*sides, sizeof(bool));
     for(int row = 0; row < sides; row++) {
         for(int col = 0; col < sides; col++) {
             if(is_duplicate(row, col, sides)) {
                 continue;
             }
-            memset(visited, 0, sizeof(bool) * sides * sides);
-            adder = solve_recursive(row, col, sides, visited, 1);
+            adder = solve_single(row, col, sides, quiet);
             if(!quiet) {
                 printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
             }
@@ -31,7 +39,6 @@ unsigned long long solve(int sides, bool quiet) {
             sum += adder;
         }
     }
-    free(visited);
     return(sum);
 }
 

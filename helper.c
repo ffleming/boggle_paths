@@ -29,7 +29,7 @@ int multiplier_for(int row, int col, int sides, bool quiet) {
         }
         return 4;
     } else if(sides_large_odd) {
-        if(row != use_rows-1 || col != use_cols-1) {
+        if(row != use_rows || col != use_cols) {
             if(!quiet) {
                 printf("\t\tOdd sides; square will be used four times\n");
             }

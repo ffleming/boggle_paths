@@ -13,11 +13,18 @@ int main(int argc, char** argv) {
     if(sides <= 0) {
         help(argv[0], 1);
     }
-    if(sides >= 1) {
+    if(sides >= 7) {
         output_bignums(sides, quiet_flag, only_row, only_col);
     } else {
-        unsigned long long result = solve(sides, quiet_flag);
-        printf("A board with %d sides has %llu possible solutions\n", sides, result);
+        unsigned long long result;
+        if(only_row != 0 && only_col != 0) {
+            result = solve_single(only_row - 1, only_col - 1, sides, quiet_flag);
+            printf("Cell (%d, %d) on a board with %d sides is the starting point of %llu paths\n",
+                    only_col, only_row, sides, result);
+        } else {
+            result = solve(sides, quiet_flag);
+            printf("A board with %d sides has %llu possible solutions\n", sides, result);
+        }
     }
     exit(0);
 }
