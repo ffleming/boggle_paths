@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     if(sides <= 0) {
         help(argv[0], 1);
     }
-    if(sides >= 7) {
+    if(sides >= 1) {
         output_bignums(sides, quiet_flag, only_row, only_col);
     } else {
         unsigned long long result;
