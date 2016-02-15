@@ -4,7 +4,7 @@
 unsigned long long solve_single(int row, int col, int sides, bool quiet) {
     bool* visited = calloc(sides*sides, sizeof(bool));
     if(!quiet) {
-        printf("Solving with bignums for (%d, %d) on a %dx%d grid...\n",col+1, row+1, sides, sides);
+        printf("Solving for (%d, %d) on a %dx%d grid...\n",col+1, row+1, sides, sides);
     }
     unsigned long long ret = solve_recursive(row, col, sides, visited, 1);
     free(visited);
