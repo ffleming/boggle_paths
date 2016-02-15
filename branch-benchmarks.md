@@ -138,7 +138,7 @@ user    133m7.370s
 sys     0m0.010s
 ```
 
-ca5ff4bb2 (Inline visitation functions
+ca5ff4bb2 (Inline visitation functions)
 --
 
 ```
