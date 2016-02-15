@@ -3,10 +3,7 @@
 
 void solve_bignum_single(int row, int col, int sides, bool quiet, mpz_t result) {
     mpz_t placeholder;
-    /* mpz_t adders[sides * sides]; */
     mpz_t* adders = malloc(sides * sides * sizeof(mpz_t));
-    /* printf("%lu\n", sizeof(placeholder)); */
-    /* mpz_array_init(adders, sides * sides, 16); */
     for(int i = 0; i < sides * sides; i++) {
         mpz_init(adders[i]);
     }
@@ -18,7 +15,11 @@ void solve_bignum_single(int row, int col, int sides, bool quiet, mpz_t result) 
     }
     solve_bignum_recursive(row, col, sides, visited, result, placeholder, 0, adders);
     free(visited);
+    for(int i = 0; i < sides * sides; i++) {
+        mpz_clear(adders[i]);
+    }
     mpz_clear(placeholder);
+    free(adders);
     return;
 }
 
@@ -52,8 +53,6 @@ void solve_bignum(int sides, bool quiet, mpz_t result) {
 void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, mpz_t sum, mpz_t old_sum, int depth, mpz_t* adders) {
     mpz_set(old_sum, sum);
     mpz_ptr adder = adders[depth];
-    /* mpz_t adder; */
-    /* mpz_init(adder); */
 
     int row, col;
     //set current cell to visited
@@ -81,7 +80,6 @@ void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, 
             mpz_add(sum, sum, adder);
         }
     }
-    /* mpz_clear(adder); */
     //Unvisit current cell
     visited[(sides * cur_row) + cur_col] = false;
     return;
