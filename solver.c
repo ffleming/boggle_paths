@@ -46,7 +46,8 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
     unsigned long long old_sum = sum;
 
     int row, col;
-    set_true(visited, sides, cur_row, cur_col);
+    //set current cell to visited
+    visited[(sides * cur_row) + cur_col] = true;
     for(int row_offset=-1; row_offset <= 1; row_offset++) {
         row = cur_row + row_offset;
         for(int col_offset=-1; col_offset <= 1; col_offset++) {
@@ -57,7 +58,8 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
             if(row_offset == 0 && col_offset == 0) {
                 continue;
             }
-            if(get_visited(visited, sides, row, col) == true) {
+            //Continue if the cell has been visited
+            if(visited[(sides * row) + col] == true) {
                 continue;
             }
             // Code below this is only called for unvisited neighbors
@@ -65,7 +67,8 @@ unsigned long long solve_recursive(int cur_row, int cur_col, int sides, bool* vi
         }
     }
 
-    set_false(visited, sides, cur_row, cur_col);
+    //set current cell to unvisited
+    visited[(sides * cur_row) + cur_col] = false;
     return(sum);
 }
 
