@@ -3,7 +3,7 @@ CFLAGS=-std=c99 -Ofast -Wall
 LIBS=
 GMP=-lgmp
 BIN=boggle_paths
-PROFILE_FLAGS=-q
+PROFILE_FLAGS=-q 4
 all: clean bignum.o solver.o main.o helper.o
 	$(CC) $(CFLAGS) -o $(BIN) bignum.o solver.o main.o helper.o $(LIBS) $(GMP)
 
@@ -23,9 +23,7 @@ clean:
 	-rm *.o $(BIN)
 
 profile: clean all
-	for arg in 1 2 3 4 ; do \
-		echo "\n$$arg sides:"; \
-		time ./$(BIN) $(PROFILE_FLAGS) $$arg; \
-		echo "\n$$arg sides with bignums:"; \
-		time ./$(BIN) $(PROFILE_FLAGS) -b $$arg; \
-	done
+	echo "\nStandard solver"; \
+	time ./$(BIN) $(PROFILE_FLAGS) ; \
+	echo "\nBignum solver:"; \
+	time ./$(BIN) -b $(PROFILE_FLAGS)
