@@ -48,18 +48,23 @@ void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, 
     mpz_init(adder);
 
     int row, col;
-    set_true(visited, sides, cur_row, cur_col);
+    //set current cell to visited
+    visited[(sides * cur_row) + cur_col] = true;
     for(int row_offset=-1; row_offset <= 1; row_offset++) {
         row = cur_row + row_offset;
+        if(row < 0 || row >= sides) {
+            continue;
+        }
         for(int col_offset=-1; col_offset <= 1; col_offset++) {
             col = cur_col + col_offset;
-            if(col < 0 || row < 0 || col >= sides || row >= sides) {
+            if(col < 0 || col >= sides) {
                 continue;
             }
             if(row_offset == 0 && col_offset == 0) {
                 continue;
             }
-            if(get_visited(visited, sides, row, col) == true) {
+            //Continue if the cell has been visited
+            if(visited[(sides * row) + col] == true) {
                 continue;
             }
             // Code below this is only called for unvisited neighbors
@@ -69,6 +74,7 @@ void solve_bignum_recursive(int cur_row, int cur_col, int sides, bool* visited, 
         }
     }
     mpz_clear(adder);
-    set_false(visited, sides, cur_row, cur_col);
+    //Unvisit current cell
+    visited[(sides * cur_row) + cur_col] = false;
     return;
 }
