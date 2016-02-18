@@ -14,14 +14,6 @@ unsigned long long solve_single(int row, int col, int sides, bool quiet) {
 unsigned long long solve(int sides, bool quiet) {
     unsigned long long sum = 0;
     unsigned long long adder = 1;
-    int use_rows = sides / 2 > 1 ? sides / 2 : 1;
-    int use_cols = sides / 2 > 1 ? sides / 2 : 1;
-    bool sides_even = (sides % 2 == 0);
-    bool sides_large_odd = (!sides_even && sides > 1);
-    if(sides_large_odd){
-      use_rows += 1;
-      use_cols += 1;
-    }
     if(!quiet) {
         printf("Solving for %dx%d grid...\n", sides, sides);
     }
