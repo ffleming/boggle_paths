@@ -69,7 +69,6 @@ unsigned long long solve(int sides, bool quiet) {
         sum += (el->adder * el->multiplier);
         free(el);
     }
-    free(&head);
     return(sum);
 }
 
