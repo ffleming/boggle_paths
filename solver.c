@@ -1,6 +1,17 @@
 #include "solver.h"
 #include "helper.h"
 
+typedef struct thread_state {
+    unsigned long long adder;
+    int row;
+    int col;
+    int sides;
+    bool quiet;
+    int multiplier;
+    pthread_t thread_id;
+    SLIST_ENTRY(thread_state) next;
+} thread_state;
+
 unsigned long long solve_single(int row, int col, int sides, bool quiet) {
     bool* visited = calloc(sides*sides, sizeof(bool));
     if(!quiet) {
@@ -11,25 +22,52 @@ unsigned long long solve_single(int row, int col, int sides, bool quiet) {
     return ret;
 }
 
+void *threaded_solve_single(void* t_state) {
+    thread_state* args = t_state;
+    args->adder = solve_single(args->row, args->col, args->sides, args->quiet);
+    return &args->adder;
+}
+
 unsigned long long solve(int sides, bool quiet) {
     unsigned long long sum = 0;
-    unsigned long long adder = 1;
+
+    SLIST_HEAD(slist_thread_state, thread_state) head = SLIST_HEAD_INITIALIZER(head);
+    SLIST_INIT(&head);
+
     if(!quiet) {
         printf("Solving for %dx%d grid...\n", sides, sides);
     }
 
     for(int row = 0; row < sides; row++) {
         for(int col = 0; col < sides; col++) {
+            thread_state* t_state = malloc(sizeof(thread_state));
+            t_state->adder = 0;
+            t_state->row = row;
+            t_state->col = col;
+            t_state->sides = sides;
+            t_state->quiet = quiet;
+            t_state->thread_id = 0;
+
             if(is_duplicate(row, col, sides)) {
                 continue;
             }
-            adder = solve_single(row, col, sides, quiet);
+
+            SLIST_INSERT_HEAD(&head, t_state, next);
+            pthread_create(&(t_state->thread_id), NULL, threaded_solve_single, t_state);
+
             if(!quiet) {
-                printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, adder);
+                printf("\tSolved square at row %d, column %d: %lld\n", row+1, col+1, t_state->adder);
             }
-            adder *= multiplier_for(row, col, sides, quiet);
-            sum += adder;
+            t_state->multiplier = multiplier_for(row, col, sides, quiet);
         }
+    }
+
+    thread_state* el;
+    SLIST_FOREACH(el, &head, next) {
+        unsigned long long res;
+        pthread_join(el->thread_id, (void*)&res);
+        sum += (el->adder * el->multiplier);
+        free(el);
     }
     return(sum);
 }

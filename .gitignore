@@ -1,3 +1,4 @@
 *.o
 boggle_paths
 *.dSYM/*
+.DS_Store
