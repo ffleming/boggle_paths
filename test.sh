@@ -7,14 +7,14 @@ function testcase() {
   sides=$1
   answer=$2
   out=$($BIN $ARGS $sides)
-  return $(echo "$out" | $GREP -q $answer)
+  return $(echo "$out" | $GREP -q "$answer possible solutions")
 }
 
-SIDES=(2 3 4)
-ANSWERS=(64 10305 12029640)
+SIDES=(1 2 3 4)
+ANSWERS=(1 64 10305 12029640)
 EXITCODE=0
 
-for i in 0 1 2; do
+for i in 0 1 2 3; do
   if testcase ${SIDES[$i]} ${ANSWERS[$i]}; then
     echo "* ${SIDES[$i]} sides correctly returns ${ANSWERS[$i]}"
   else
