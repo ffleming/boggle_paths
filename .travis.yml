@@ -1,0 +1,4 @@
+language: c
+script: make test && make profile
+install: sudo apt-get install -y libgmp-dev
+dist: trusty

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BIN="./boggle_paths"
 ARGS="-q"
