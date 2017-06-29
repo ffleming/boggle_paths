@@ -26,7 +26,7 @@ test: clean all
 	./test.sh
 
 profile: clean all
-	echo "\nStandard solver"; \
-	time ./$(BIN) $(PROFILE_FLAGS) ; \
-	echo "\nBignum solver:"; \
-	time ./$(BIN) -b $(PROFILE_FLAGS)
+	./profile.sh
+
+profile-long: clean all
+	./profile.sh --long

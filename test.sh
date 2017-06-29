@@ -11,7 +11,7 @@ function testcase() {
 }
 
 SIDES=(2 3 4)
-ANSWERS=(64 10305  12029640)
+ANSWERS=(64 10305 12029640)
 EXITCODE=0
 
 for i in 0 1 2; do
