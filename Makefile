@@ -22,6 +22,9 @@ helper.o:
 clean:
 	-rm *.o $(BIN)
 
+test: clean all
+	./test.sh
+
 profile: clean all
 	echo "\nStandard solver"; \
 	time ./$(BIN) $(PROFILE_FLAGS) ; \
